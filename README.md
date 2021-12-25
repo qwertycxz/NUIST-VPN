@@ -62,4 +62,4 @@
 
 ## 使用许可
 
-[Apache 2.0](LICENSE) © Richard Littauer
+[Apache 2.0](LICENSE) © qwertycxz
