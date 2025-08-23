@@ -60,6 +60,10 @@
 
 [@qwertycxz](https://github.com/qwertycxz)
 
+## 致谢
+
+本项目参考了[NJUPT-VPN](https://github.com/Lihewin/NJUPT-VPN)的实现，由[@airline233](https://github.com/airline233)移植。
+
 ## 如何贡献
 
 欢迎[提出Issue](https://github.com/qwertycxz/NUIST-VPN/issues/new)或者提交Pull Request。
