@@ -1,24 +1,25 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "NUIST VPN",
-	"version": "0.1.0",
+	"version": "0.1.8",
 	"description": "一键通过校园VPN访问网页",
 	"icons": {
 		"16": "icon.png",
 		"48": "icon.png",
 		"128": "icon.png"
 	},
-	"browser_action": {
+	"action": {
 		"default_icon": "icon.png"
 	},
 	"background": {
-		"scripts": [
-			"bg.js"
-		]
+		"service_worker": "bg.js"
 	},
 	"homepage_url": "https://qwertycxz.top",
 	"incognito": "split",
 	"permissions": [
-		"tabs"
+		"tabs",
+		"scripting"
 	]
+
 }
+
