@@ -5,6 +5,21 @@ function base64ToUtf8(base64Str) {
     }).join(''));
 }
 
+// 将字符串编码为Base64
+function encodeBase64(str) {
+    return btoa(str);
+}
+
+// 从Base64解码字符串
+function decodeBase64(base64Str) {
+    try {
+        return atob(base64Str);
+    } catch (error) {
+        console.error('Base64解码失败:', error);
+        throw new Error('密钥格式错误');
+    }
+}
+
 // 将字符串转换为 ArrayBuffer
 function str2ab(str) {
     var buf = new ArrayBuffer(str.length);
@@ -22,26 +37,31 @@ function ab2hex(buffer) {
 
 // AES-CBC 加密函数
 async function encrypt(domainWithPort, encryptionKey) {
-    const key = await crypto.subtle.importKey(
-        "raw",
-        str2ab(encryptionKey),
-        { name: "AES-CBC" },
-        false,
-        ["encrypt"]
-    );
+    try {
+        const key = await crypto.subtle.importKey(
+            "raw",
+            str2ab(encryptionKey),
+            { name: "AES-CBC" },
+            false,
+            ["encrypt"]
+        );
 
-    const iv = str2ab(encryptionKey);
+        const iv = str2ab(encryptionKey);
 
-    const encrypted = await crypto.subtle.encrypt(
-        {
-            name: "AES-CBC",
-            iv: iv
-        },
-        key,
-        str2ab(domainWithPort)
-    );
+        const encrypted = await crypto.subtle.encrypt(
+            {
+                name: "AES-CBC",
+                iv: iv
+            },
+            key,
+            str2ab(domainWithPort)
+        );
 
-    return ab2hex(encrypted);
+        return ab2hex(encrypted);
+    } catch (error) {
+        console.error('加密失败:', error);
+        throw new Error('加密过程失败: ' + error.message);
+    }
 }
 
 // 获取默认加密密钥（Base64 编码）
@@ -61,41 +81,88 @@ chrome.runtime.onInstalled.addListener(function (details) {
 
 // 监听 action 点击事件
 chrome.action.onClicked.addListener(async function (tab) {
-    // 解析当前 URL
-    let url = new URL(tab.url);
+    try {
+        // 解析当前 URL
+        let url = new URL(tab.url);
 
-    // 从存储中获取设置
-    const settings = await chrome.storage.local.get(['vpnServer', 'customServers', 'encryptionKey']);
-    let selectedServer = settings.vpnServer || 'nuist';
-    const customServers = settings.customServers || {};
-    const encryptionKey = settings.encryptionKey || getDefaultEncryptionKey();
+        // 从存储中获取设置
+        const settings = await chrome.storage.local.get(['vpnServer', 'customServers', 'encryptionKeyEncoded', 'encryptionKey']);
+        let selectedServer = settings.vpnServer || 'nuist';
+        const customServers = settings.customServers || {};
 
-    // 获取 VPN 前缀和加密密钥
-    let VpnPrefix;
-    let serverKey = encryptionKey;
-
-    if (selectedServer.startsWith('custom_')) {
-        // 自定义服务器
-        const customId = selectedServer;
-        const customServer = customServers[customId];
-        if (customServer) {
-            VpnPrefix = `${customServer.baseUrl}/${url.protocol.replace(':', '')}/webvpn`;
-            serverKey = customServer.encryptionKey || encryptionKey;
+        // 解码密钥（向后兼容：如果没有编码版本则使用明文）
+        let encryptionKey;
+        if (settings.encryptionKeyEncoded) {
+            try {
+                encryptionKey = decodeBase64(settings.encryptionKeyEncoded);
+            } catch (error) {
+                console.warn('密钥解码失败，使用默认密钥:', error);
+                encryptionKey = getDefaultEncryptionKey();
+            }
+        } else if (settings.encryptionKey) {
+            // 旧版本明文存储
+            encryptionKey = settings.encryptionKey;
         } else {
-            return; // 服务器配置错误
+            encryptionKey = getDefaultEncryptionKey();
         }
-    } else if (selectedServer === 'nuist') {
-        VpnPrefix = `https://client.vpn.nuist.edu.cn/${url.protocol.replace(':', '')}/webvpn`;
-    } else {
-        // 默认 njupt
-        VpnPrefix = `https://vpn.njupt.edu.cn:8443/${url.protocol.replace(':', '')}/webvpn`;
+
+        // 获取 VPN 前缀和加密密钥
+        let VpnPrefix;
+        let serverKey = encryptionKey;
+
+        if (selectedServer.startsWith('custom_')) {
+            // 自定义服务器
+            const customId = selectedServer;
+            const customServer = customServers[customId];
+            if (customServer) {
+                VpnPrefix = `${customServer.baseUrl}/${url.protocol.replace(':', '')}/webvpn`;
+                serverKey = customServer.encryptionKey || encryptionKey;
+            } else {
+                // 服务器配置错误，显示通知并打开选项页面
+                chrome.action.openOptionsPage();
+                chrome.notifications.create({
+                    type: 'basic',
+                    iconUrl: 'icons/icon128.png',
+                    title: '自定义服务器错误',
+                    message: '找不到选定的自定义服务器配置，请重新设置。'
+                });
+                return;
+            }
+        } else if (selectedServer === 'nuist') {
+            VpnPrefix = `https://client.vpn.nuist.edu.cn/${url.protocol.replace(':', '')}/webvpn`;
+        } else {
+            // 默认 njupt
+            VpnPrefix = `https://vpn.njupt.edu.cn:8443/${url.protocol.replace(':', '')}/webvpn`;
+        }
+
+        let domainWithPort = url.host; // 包括域名和端口（如果有）
+
+        // 加密域名，增加异常处理
+        let encryptedDomain;
+        try {
+            encryptedDomain = await encrypt(domainWithPort, serverKey);
+        } catch (error) {
+            console.error('域名加密失败:', error);
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: 'icons/icon128.png',
+                title: '加密失败',
+                message: '无法加密域名，请检查密钥是否正确。'
+            });
+            return;
+        }
+
+        // 构造新的 URL
+        let newUrl = VpnPrefix + encryptedDomain + url.pathname + url.search + url.hash;
+        // 跳转到新的 URL
+        chrome.tabs.create({ url: newUrl });
+    } catch (error) {
+        console.error('处理点击事件失败:', error);
+        chrome.notifications.create({
+            type: 'basic',
+            iconUrl: 'icons/icon128.png',
+            title: '操作失败',
+            message: '发生未知错误: ' + error.message
+        });
     }
-
-    let domainWithPort = url.host; // 包括域名和端口（如果有）
-    let encryptedDomain = await encrypt(domainWithPort, serverKey);
-
-    // 构造新的 URL
-    let newUrl = VpnPrefix + encryptedDomain + url.pathname + url.search + url.hash;
-    // 跳转到新的 URL
-    chrome.tabs.create({ url: newUrl });
 });
