@@ -79,9 +79,59 @@ chrome.runtime.onInstalled.addListener(function (details) {
     }
 });
 
+// 检查 URL 是否为扩展页面或浏览器内置页面
+function isRestrictedUrl(url) {
+    try {
+        const urlObj = new URL(url);
+
+        // 检查是否为扩展页面
+        if (urlObj.protocol === 'chrome-extension:' ||
+            urlObj.protocol === 'moz-extension:' ||
+            urlObj.protocol === 'ms-browser-extension:') {
+            return true;
+        }
+
+        // 检查是否为浏览器内置页面
+        if (urlObj.protocol === 'chrome:' ||
+            urlObj.protocol === 'edge:' ||
+            urlObj.protocol === 'about:' ||
+            urlObj.protocol === 'file:' ||
+            urlObj.protocol === 'data:' ||
+            urlObj.protocol === 'javascript:') {
+            return true;
+        }
+
+        // 检查特殊页面
+        const restrictedPatterns = [
+            'newtab',
+            'chrome.google.com',
+            'microsoftedge.com',
+            'chrome.com',
+            'edge.com'
+        ];
+
+        const hostname = urlObj.hostname.toLowerCase();
+        return restrictedPatterns.some(pattern => hostname.includes(pattern));
+    } catch (error) {
+        console.error('URL 检查失败:', error);
+        return true; // 无法解析的URL视为受限
+    }
+}
+
 // 监听 action 点击事件
 chrome.action.onClicked.addListener(async function (tab) {
     try {
+        // 检查当前页面是否为扩展页面或浏览器内置页面
+        if (isRestrictedUrl(tab.url)) {
+            chrome.notifications.create({
+                type: 'basic',
+                iconUrl: 'icon.png',
+                title: '无法访问',
+                message: '无法在扩展页面或浏览器内置页面上使用此功能。请在普通网页上点击扩展图标。'
+            });
+            return;
+        }
+
         // 解析当前 URL
         let url = new URL(tab.url);
 
@@ -122,7 +172,7 @@ chrome.action.onClicked.addListener(async function (tab) {
                 chrome.action.openOptionsPage();
                 chrome.notifications.create({
                     type: 'basic',
-                    iconUrl: 'icons/icon128.png',
+                    iconUrl: 'icon.png',
                     title: '自定义服务器错误',
                     message: '找不到选定的自定义服务器配置，请重新设置。'
                 });
@@ -145,7 +195,7 @@ chrome.action.onClicked.addListener(async function (tab) {
             console.error('域名加密失败:', error);
             chrome.notifications.create({
                 type: 'basic',
-                iconUrl: 'icons/icon128.png',
+                iconUrl: 'icon.png',
                 title: '加密失败',
                 message: '无法加密域名，请检查密钥是否正确。'
             });
@@ -160,7 +210,7 @@ chrome.action.onClicked.addListener(async function (tab) {
         console.error('处理点击事件失败:', error);
         chrome.notifications.create({
             type: 'basic',
-            iconUrl: 'icons/icon128.png',
+            iconUrl: 'icon.png',
             title: '操作失败',
             message: '发生未知错误: ' + error.message
         });
