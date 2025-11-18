@@ -89,47 +89,37 @@ function renderCustomServers(customServers, selectedServer) {
     const list = document.getElementById('customServersList');
     list.innerHTML = '';
 
-    Object.entries(customServers).forEach(([serverId, server]) => {
-        const item = document.createElement('div');
-        item.className = 'custom-server-item';
+    // 检查选中的服务器是否存在于自定义服务器列表中
+    const serverIds = Object.keys(customServers);
+    const validSelected = serverIds.includes(selectedServer);
 
-        // 使用DOM API替代innerHTML，避免XSS漏洞
-        const radio = document.createElement('input');
-        radio.type = 'radio';
-        radio.name = 'vpnServer';
+    Object.entries(customServers).forEach(([serverId, server]) => {
+        // 使用模板克隆节点，避免XSS
+        const template = document.getElementById('custom-server-template');
+        const item = template.content.firstElementChild.cloneNode(true);
+
+        // 设置radio按钮
+        const radio = item.querySelector('input[type="radio"]');
         radio.value = serverId;
-        if (selectedServer === serverId) {
+        // 只有当选中服务器有效且匹配时，才设置为选中状态
+        if (validSelected && selectedServer === serverId) {
             radio.checked = true;
         }
 
-        const info = document.createElement('div');
-        info.className = 'custom-server-item-info';
+        // 设置服务器信息
+        item.querySelector('.custom-server-item-name').textContent = server.name;
+        item.querySelector('.custom-server-item-url').textContent = server.baseUrl;
 
-        const name = document.createElement('div');
-        name.className = 'custom-server-item-name';
-        name.textContent = server.name; // 使用textContent防止XSS
-
-        const url = document.createElement('div');
-        url.className = 'custom-server-item-url';
-        url.textContent = server.baseUrl; // 使用textContent防止XSS
-
-        const btnDelete = document.createElement('button');
-        btnDelete.className = 'btn-delete';
-        btnDelete.textContent = '删除';
+        // 添加删除事件
+        const btnDelete = item.querySelector('.btn-delete');
         btnDelete.addEventListener('click', () => deleteServer(serverId));
 
-        info.appendChild(name);
-        info.appendChild(url);
-        item.appendChild(radio);
-        item.appendChild(info);
-        item.appendChild(btnDelete);
-
-        list.appendChild(item);
-
-        // 为新添加的单选框添加事件监听
+        // 添加radio变化事件
         radio.addEventListener('change', function () {
             showStatus('已选择: ' + server.name, 'info');
         });
+
+        list.appendChild(item);
     });
 }
 
@@ -149,7 +139,11 @@ async function deleteServer(serverId) {
     let newSelected = currentServer;
     if (currentServer === serverId) {
         newSelected = 'nuist';
-        document.querySelector('input[value="nuist"]').checked = true;
+        // 确保 nuist 选项被选中
+        const nuistRadio = document.querySelector('input[value="nuist"]');
+        if (nuistRadio) {
+            nuistRadio.checked = true;
+        }
     }
 
     await chrome.storage.local.set({
@@ -209,7 +203,8 @@ document.getElementById('addServerBtn').addEventListener('click', async function
 // 保存按钮事件
 document.getElementById('saveBtn').addEventListener('click', async function () {
     try {
-        const selectedServer = document.querySelector('input[name="vpnServer"]:checked').value;
+        const checkedRadio = document.querySelector('input[name="vpnServer"]:checked');
+        const selectedServer = checkedRadio ? checkedRadio.value : 'nuist';
         const encryptionKey = document.getElementById('globalEncryptionKey').value.trim();
 
         // 验证加密密钥编码后是否为 16 字节
@@ -248,7 +243,11 @@ document.getElementById('resetBtn').addEventListener('click', async function () 
             encryptionKey: defaultKey
         });
 
-        document.querySelector('input[value="nuist"]').checked = true;
+        // 确保 nuist 选项被选中
+        const nuistRadio = document.querySelector('input[value="nuist"]');
+        if (nuistRadio) {
+            nuistRadio.checked = true;
+        }
         document.getElementById('globalEncryptionKey').value = defaultKey;
         renderCustomServers({}, 'nuist');
 
