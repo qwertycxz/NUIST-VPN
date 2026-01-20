@@ -1,423 +1,282 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VPN 设置</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
-        }
-
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-        }
-
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            color: #333;
-            text-align: center;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #999;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        .option-group {
-            margin-bottom: 24px;
-            padding-bottom: 24px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .option-group:last-of-type {
-            border-bottom: none;
-        }
-
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 16px;
-            display: flex;
-            align-items: center;
-        }
-
-        .section-title::before {
-            content: '';
-            display: inline-block;
-            width: 4px;
-            height: 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            margin-right: 12px;
-            border-radius: 2px;
-        }
-
-        .option-label {
-            display: flex;
-            align-items: center;
-            padding: 12px;
-            margin-bottom: 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .option-label:hover {
-            border-color: #667eea;
-            background-color: #f8f9ff;
-        }
-
-        .option-label input[type="radio"] {
-            margin-right: 12px;
-            cursor: pointer;
-            width: 18px;
-            height: 18px;
-            accent-color: #667eea;
-        }
-
-        .option-label input[type="radio"]:checked+.label-content {
-            color: #667eea;
-            font-weight: 600;
-        }
-
-        .label-content {
-            flex: 1;
-            transition: color 0.3s ease;
-        }
-
-        .server-name {
-            font-weight: 600;
-            color: #333;
-            font-size: 15px;
-        }
-
-        .server-url {
-            font-size: 12px;
-            color: #999;
-            margin-top: 4px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .custom-server-section {
-            background: #f8f9ff;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-
-        .custom-servers-list {
-            margin-top: 16px;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-
-        .custom-server-item {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .custom-server-item-info {
-            flex: 1;
-        }
-
-        .custom-server-item-name {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-
-        .custom-server-item-url {
-            font-size: 12px;
-            color: #999;
-            margin-top: 4px;
-            font-family: 'Courier New', monospace;
-        }
-
-        .btn-delete {
-            background: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .btn-delete:hover {
-            background: #ff5252;
-        }
-
-        .encryption-section {
-            background: #f8f9ff;
-            padding: 16px;
-            border-radius: 8px;
-            margin-top: 12px;
-        }
-
-        .button-group {
-            margin-top: 30px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        button {
-            flex: 1;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            min-width: 120px;
-        }
-
-        .btn-save {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-        }
-
-        .btn-save:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-save:active {
-            transform: translateY(0);
-        }
-
-        .btn-add {
-            background: #28a745;
-            color: white;
-        }
-
-        .btn-add:hover {
-            background: #218838;
-        }
-
-        .btn-reset {
-            background: #f0f0f0;
-            color: #333;
-            border: 1px solid #e0e0e0;
-        }
-
-        .btn-reset:hover {
-            background: #e8e8e8;
-        }
-
-        .status {
-            margin-top: 20px;
-            padding: 14px;
-            border-radius: 8px;
-            font-size: 13px;
-            text-align: center;
-            display: none;
-        }
-
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            display: block;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            display: block;
-            border: 1px solid #f5c6cb;
-        }
-
-        .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            display: block;
-            border: 1px solid #bee5eb;
-        }
-
-        .info-box {
-            background: #f0f7ff;
-            border-left: 4px solid #667eea;
-            padding: 16px;
-            margin-bottom: 24px;
-            border-radius: 6px;
-            font-size: 13px;
-            color: #333;
-        }
-
-        .info-box strong {
-            color: #667eea;
-        }
-
-        .collapse-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .collapse-content.show {
-            max-height: 500px;
-        }
-
-        .collapse-toggle {
-            cursor: pointer;
-            user-select: none;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
-        <h1>🔐 VPN 设置</h1>
-        <p class="subtitle">配置您的VPN服务器和加密选项</p>
-
-        <div class="info-box">
-            <strong>💡 提示：</strong>点击扩展图标将直接通过选定的VPN服务器访问当前网页。
-        </div>
-
-        <!-- 内置服务器选择 -->
-        <div class="option-group">
-            <div class="section-title">内置 VPN 服务器</div>
-
-            <label class="option-label">
-                <input type="radio" name="vpnServer" value="nuist">
-                <div class="label-content">
-                    <div class="server-name">NUIST</div>
-                    <div class="server-url">https://client.vpn.nuist.edu.cn</div>
-                </div>
-            </label>
-
-            <label class="option-label">
-                <input type="radio" name="vpnServer" value="njupt">
-                <div class="label-content">
-                    <div class="server-name">NJUPT</div>
-                    <div class="server-url">https://vpn.njupt.edu.cn:8443</div>
-                </div>
-            </label>
-
-        </div>
-
-        <!-- 自定义服务器 -->
-        <div class="option-group">
-            <div class="section-title">自定义服务器</div>
-
-            <div class="custom-server-section">
-                <div class="form-group">
-                    <label class="form-label" for="customServerName">服务器名称</label>
-                    <input type="text" id="customServerName" class="form-input" placeholder="例如: 我的学校">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="customServerUrl">VPN 服务器地址</label>
-                    <input type="text" id="customServerUrl" class="form-input"
-                        placeholder="例如: https://vpn.example.com:8443">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label" for="customServerKey">加密密钥</label>
-                    <input type="password" id="customServerKey" class="form-input" placeholder="留空使用默认密钥">
-                </div>
-
-                <button class="btn-add" id="addServerBtn">添加自定义服务器</button>
-            </div>
-
-            <div class="custom-servers-list" id="customServersList"></div>
-
-            <!-- 自定义服务器项模板 -->
-            <template id="custom-server-template">
-                <div class="custom-server-item">
-                    <input type="radio" name="vpnServer">
-                    <div class="custom-server-item-info">
-                        <div class="custom-server-item-name"></div>
-                        <div class="custom-server-item-url"></div>
-                    </div>
-                    <button class="btn-delete">删除</button>
-                </div>
-            </template>
-        </div>
-
-        <!-- 全局加密密钥设置 -->
-        <div class="option-group">
-            <div class="section-title collapse-toggle" id="encryptionToggle">🔑 高级：加密密钥设置</div>
-
-            <div class="collapse-content" id="encryptionContent">
-                <div class="encryption-section">
-                    <p style="font-size: 12px; color: #666; margin-bottom: 12px;">
-                        仅当您了解加密机制时才修改此项。默认密钥可用于自带服务器。
-                    </p>
-
-                    <div class="form-group">
-                        <label class="form-label" for="globalEncryptionKey">全局加密密钥</label>
-                        <input type="password" id="globalEncryptionKey" class="form-input">
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="button-group">
-            <button class="btn-save" id="saveBtn">保存设置</button>
-            <button class="btn-reset" id="resetBtn">恢复默认</button>
-        </div>
-
-        <div class="status" id="status"></div>
-    </div>
-
-    <script src="options.js"></script>
-</body>
-
+<!doctype html>
+<html lang="zh-Hans">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="dist/options.mjs" type="module"></script>
+		<style>
+			* {
+				box-sizing: border-box;
+				margin: 0;
+				padding: 0;
+			}
+			blockquote {
+				background: #ebf5ff;
+				border-left: 4px solid #007af5;
+				border-radius: 6px;
+				color: #333;
+				font-size: 13px;
+				margin-bottom: 24px;
+				padding: 16px;
+			}
+			blockquote strong {
+				color: #007af5;
+			}
+			body {
+				background-color: #f5f7fa;
+				font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+				min-height: 100vh;
+				padding: 40px 20px;
+			}
+			button {
+				border: none;
+				border-radius: 8px;
+				cursor: pointer;
+				flex: 1;
+				font-size: 14px;
+				font-weight: 600;
+				min-width: 120px;
+				padding: 12px 24px;
+				transition: all 0.3s ease;
+			}
+			form {
+				background: #f8f9ff;
+				border-radius: 8px;
+				margin-top: 12px;
+				padding: 16px;
+			}
+			h1 {
+				color: #333;
+				font-size: 24px;
+				margin-bottom: 10px;
+				text-align: center;
+			}
+			h2 {
+				align-items: center;
+				color: #333;
+				display: flex;
+				font-size: 16px;
+				font-weight: 600;
+				margin-bottom: 16px;
+			}
+			h2::before {
+				background: #007af5;
+				border-radius: 2px;
+				content: '';
+				display: inline-block;
+				height: 20px;
+				margin-right: 12px;
+				width: 4px;
+			}
+			h3 {
+				color: #333;
+				font-size: 14px;
+				font-weight: 600;
+			}
+			hgroup p {
+				color: #666;
+				font-size: 14px;
+				margin-bottom: 30px;
+				text-align: center;
+			}
+			main {
+				background: white;
+				border-radius: 12px;
+				box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+				margin: 0 auto;
+				max-width: 600px;
+				padding: 40px;
+			}
+			section {
+				border-bottom: 1px solid #eee;
+				margin-bottom: 24px;
+				padding-bottom: 24px;
+			}
+			section:last-of-type {
+				border-bottom: none;
+			}
+			.custom-form button {
+				background: #52c41a;
+				color: white;
+			}
+			.custom-form button:hover {
+				background: #73d13d;
+			}
+			.custom-form input {
+				border: 1px solid #d9d9d9;
+				border-radius: 6px;
+				font-size: 14px;
+				margin-top: 4px;
+				padding: 10px 12px;
+				transition: all 0.3s ease;
+				width: 100%;
+			}
+			.custom-form input:focus {
+				border-color: #007af5;
+				box-shadow: 0 0 0 2px rgba(0, 122, 245, 0.2);
+				outline: none;
+			}
+			.custom-form label {
+				color: #333;
+				display: block;
+				font-size: 14px;
+				font-weight: 600;
+				margin-bottom: 16px;
+			}
+			.vpn-list button {
+				background: #ff4d4f;
+				border: none;
+				border-radius: 4px;
+				color: white;
+				cursor: pointer;
+				flex: none;
+				font-size: 12px;
+				min-width: auto;
+				padding: 6px 12px;
+				transition: all 0.3s ease;
+			}
+			.vpn-list button:hover {
+				background: #ff7875;
+			}
+			.vpn-list div {
+				flex: 1;
+				transition: color 0.3s ease;
+			}
+			.vpn-list div div {
+				color: #999;
+				font-family: 'Courier New', monospace;
+				font-size: 12px;
+				margin-top: 4px;
+			}
+			.vpn-list input {
+				accent-color: #007af5;
+				cursor: pointer;
+				height: 18px;
+				margin-right: 12px;
+				width: 18px;
+			}
+			.vpn-list input:checked {
+				color: #007af5;
+				font-weight: 600;
+			}
+			.vpn-list label {
+				align-items: center;
+				border: 1px solid #e8e8e8;
+				border-radius: 8px;
+				cursor: pointer;
+				display: flex;
+				margin-bottom: 8px;
+				padding: 12px;
+				transition: all 0.3s ease;
+			}
+			.vpn-list label:hover {
+				background-color: #f0f7ff;
+				border-color: #007af5;
+			}
+			@media (prefers-color-scheme: dark) {
+				blockquote {
+					background: #1a2634;
+					color: #ccc;
+				}
+				blockquote strong {
+					color: #4dabf7;
+				}
+				body {
+					background-color: #121212;
+				}
+				form {
+					background: #252525;
+				}
+				h1,
+				h2,
+				h3,
+				.custom-form label {
+					color: #e0e0e0;
+				}
+				hgroup p {
+					color: #888;
+				}
+				main {
+					background: #1e1e1e;
+					box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+				}
+				section {
+					border-bottom-color: #333;
+				}
+				.custom-form input {
+					background-color: #2d2d2d;
+					border-color: #444;
+					color: #e0e0e0;
+				}
+				.custom-form input:focus {
+					border-color: #007af5;
+				}
+				.vpn-list div div {
+					color: #777;
+				}
+				.vpn-list label {
+					border-color: #333;
+				}
+				.vpn-list label:hover {
+					background-color: #252525;
+					border-color: #007af5;
+				}
+			}
+		</style>
+		<title>VPN 设置</title>
+	</head>
+	<body>
+		<main>
+			<hgroup>
+				<h1>VPN 设置</h1>
+				<p>配置您的VPN服务器和加密选项</p>
+			</hgroup>
+			<blockquote><strong>💡 提示：</strong>点击扩展图标将直接通过选定的VPN服务器访问当前网页。</blockquote>
+			<section class="vpn-list" id="vpn-list">
+				<h2>VPN 服务器</h2>
+				<label>
+					<input id="builtin-nuist" name="vpn" type="radio" value="builtin-nuist" />
+					<div>
+						<h3>NUIST</h3>
+						<div>https://client.vpn.nuist.edu.cn</div>
+					</div>
+				</label>
+				<label>
+					<input name="vpn" type="radio" value="builtin-njupt" />
+					<div>
+						<h3>NJUPT</h3>
+						<div>https://vpn.njupt.edu.cn:8443</div>
+					</div>
+				</label>
+			</section>
+			<section>
+				<h2>自定义服务器</h2>
+				<form class="custom-form" id="custom-form">
+					<label>
+						服务器名称
+						<input id="custom-name" placeholder="例如: 我的学校" required />
+					</label>
+					<label>
+						VPN 服务器地址
+						<input id="custom-origin" placeholder="例如: https://vpn.example.com:8443" required type="url" />
+					</label>
+					<label>
+						加密密钥（Base64编码）
+						<input id="custom-key" placeholder="留空使用默认密钥" type="password" />
+					</label>
+					<button type="submit">添加自定义服务器</button>
+				</form>
+			</section>
+		</main>
+		<template id="custom-template">
+			<label class="vpn-list">
+				<input name="vpn" type="radio" />
+				<div>
+					<h3></h3>
+					<div></div>
+				</div>
+				<button>删除</button>
+			</label>
+		</template>
+	</body>
 </html>
