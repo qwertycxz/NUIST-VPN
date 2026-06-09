@@ -1,25 +1,24 @@
 {
+	"$schema": "https://schemastore.org/chrome-manifest",
+	"action": {
+		"default_title": "NUIST VPN\n单击以通过校园 VPN 在新标签页中打开当前页面"
+	},
+	"author": "qwerty吃小庄",
+	"background": {
+		"scripts": ["dist/background.js"],
+		"service_worker": "dist/background.js"
+	},
+	"description": "一键通过校园VPN访问网页，支持NUIST、NJUPT与其他所有使用江苏易安联网络技术有限公司校园VPN的高校。",
+	"homepage_url": "https://github.com/qwertycxz/NUIST-VPN",
+	"icons": {
+		"128": "icon.png",
+		"16": "icon.png",
+		"48": "icon.png"
+	},
+	"incognito": "split",
 	"manifest_version": 3,
 	"name": "NUIST VPN",
-	"version": "0.1.8",
-	"description": "一键通过校园VPN访问网页",
-	"icons": {
-		"16": "icon.png",
-		"48": "icon.png",
-		"128": "icon.png"
-	},
-	"action": {
-		"default_icon": "icon.png"
-	},
-	"background": {
-		"service_worker": "bg.js"
-	},
-	"homepage_url": "https://qwertycxz.top",
-	"incognito": "split",
-	"permissions": [
-		"tabs",
-		"scripting"
-	]
-
+	"options_page": "options.html",
+	"permissions": ["activeTab", "storage"],
+	"version": "0.2.0"
 }
-

@@ -1,5 +1,11 @@
 # NUIST-VPN
 
+## 更新
+
+现在也支持南京邮电大学（NJUPT）与部分使用Enlink的自定义学校。
+
+## 简介
+
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 一款chromium扩展,允许你一键通过校园VPN访问任何网址。
@@ -28,7 +34,7 @@
 
 本扩展的唯一目标:
 
-  实现"一键VPN访问"的功能。
+实现"一键VPN访问"的功能。
 
 ## 安装
 

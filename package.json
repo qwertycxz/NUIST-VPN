@@ -1,0 +1,28 @@
+{
+	"$schema": "https://schemastore.org/package",
+	"bugs": "https://github.com/qwertycxz/NUIST-VPN/issues",
+	"devDependencies": {
+		"@types/chrome": "^0.1.43",
+		"prettier": "^3.8.3",
+		"typescript": "^6.0.3"
+	},
+	"funding": "https://ko-fi.com/qwertycxz",
+	"license": "Apache-2.0",
+	"name": "nuist-vpn",
+	"prettier": {
+		"arrowParens": "avoid",
+		"jsxSingleQuote": true,
+		"printWidth": 256,
+		"proseWrap": "never",
+		"quoteProps": "consistent",
+		"semi": false,
+		"singleQuote": true,
+		"tabWidth": 4,
+		"useTabs": true
+	},
+	"private": true,
+	"scripts": {
+		"build": "tsc",
+		"format": "prettier -w ."
+	}
+}
