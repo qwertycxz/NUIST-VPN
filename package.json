@@ -1,11 +1,13 @@
 {
 	"$schema": "https://schemastore.org/package",
 	"bugs": "https://github.com/qwertycxz/NUIST-VPN/issues",
+	"dependencies": {
+		"esbuild": "^0.28.0",
+		"esbuild-plugin-replace": "^1.4.0"
+	},
 	"devDependencies": {
 		"@types/chrome": "^0.1.43",
 		"@types/node": "^25.9.2",
-		"esbuild": "^0.28.0",
-		"esbuild-plugin-replace": "^1.4.0",
 		"prettier": "^3.8.3",
 		"typescript": "^6.0.3"
 	},
