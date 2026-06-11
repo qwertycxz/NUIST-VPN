@@ -25,7 +25,9 @@
 	},
 	"private": true,
 	"scripts": {
-		"build": "node esbuild.ts",
+		"build": "node esbuild/build.ts",
+		"check": "tsc",
+		"dev": "node esbuild/dev.ts",
 		"format": "prettier -w ."
 	}
 }

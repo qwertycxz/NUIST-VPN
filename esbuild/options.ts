@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import { exec } from 'child_process'
-import { build } from 'esbuild'
+import type { BuildOptions } from 'esbuild'
 import { replace } from 'esbuild-plugin-replace'
 import { promisify } from 'util'
 
-build({
+export default {
 	charset: 'utf8',
 	entryPoints: ['src/background.ts', 'src/manifest.json', 'src/options.html', 'src/options.mts'],
 	loader: {
@@ -19,4 +19,4 @@ build({
 			'include': /\.json$/,
 		}),
 	],
-})
+} satisfies BuildOptions
