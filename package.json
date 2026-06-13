@@ -2,7 +2,7 @@
 	"$schema": "https://schemastore.org/package",
 	"bugs": "https://github.com/qwertycxz/NUIST-VPN/issues",
 	"dependencies": {
-		"esbuild": "^0.28.0",
+		"esbuild": "^0.28.1",
 		"esbuild-plugin-replace": "^1.4.0"
 	},
 	"devDependencies": {
