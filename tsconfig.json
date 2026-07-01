@@ -5,7 +5,6 @@
 		"allowUnreachableCode": false,
 		"allowUnusedLabels": false,
 		"exactOptionalPropertyTypes": true,
-		"module": "esnext",
 		"noEmit": true,
 		"noImplicitOverride": true,
 		"noImplicitReturns": true,

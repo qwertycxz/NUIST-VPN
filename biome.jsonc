@@ -174,7 +174,7 @@
 				"noThenProperty": "off",
 				"noUnassignedVariables": "warn",
 				"noUndeclaredEnvVars": "off",
-				// "noUnnecessaryConditions": "warn",
+				// "noUnnecessaryConditions": "warn", // Biome 这条规则有 Bug
 				"noUnusedExpressions": "warn",
 				"useAwait": "warn",
 				"useErrorMessage": "warn",
