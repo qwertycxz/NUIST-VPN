@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://schemastore.org/github-workflow
 jobs:
-  check:
+  release:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@main
