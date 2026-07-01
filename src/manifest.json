@@ -10,6 +10,9 @@
 	},
 	"browser_specific_settings": {
 		"gecko": {
+			"data_collection_permissions": {
+				"required": ["browsingActivity"]
+			},
 			"id": "nuist-vpn@qwertycxz.top"
 		}
 	},
