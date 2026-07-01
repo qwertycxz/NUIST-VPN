@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://schemastore.org/github-workflow
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+        with:
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: zip -j ${{ runner.temp }}/NUIST-VPN.zip dist/*
+      - uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda
+        with:
+          append_body: true
+          discussion_category_name: Announcements
+          files: ${{ runner.temp }}/NUIST-VPN.zip
+          generate_release_notes: true
+          make_latest: true
+on:
+  push:
+    tags:
+      - v*
+permissions:
+  contents: write
+  discussions: write

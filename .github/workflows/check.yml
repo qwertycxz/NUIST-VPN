@@ -1,0 +1,26 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: actions/setup-node@main
+        with:
+          cache: npm
+      - run: npm i
+      - run: npm run lint
+      - run: npm run format
+      - run: npm run type
+      - run: npm run build
+      - uses: actions/upload-artifact@main
+        with:
+          compression-level: 9
+          if-no-files-found: error
+          path: dist/*
+on:
+  pull_request:
+  push:
+    tags-ignore:
+      - '*'
+permissions:
+  contents: read

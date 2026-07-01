@@ -18,6 +18,14 @@
 	"prettier": {
 		"arrowParens": "avoid",
 		"jsxSingleQuote": true,
+		"overrides": [
+			{
+				"files": "*.yml",
+				"options": {
+					"tabWidth": 2
+				}
+			}
+		],
 		"printWidth": 256,
 		"proseWrap": "never",
 		"quoteProps": "consistent",
@@ -32,7 +40,8 @@
 		"dev": "node esbuild/dev.ts",
 		"format": "prettier -w .",
 		"format:check": "prettier -c .",
-		"lint": "tsc && biome check",
-		"lint:fix": "biome check --fix --unsafe"
+		"lint": "biome check",
+		"lint:fix": "biome check --fix --unsafe",
+		"type": "tsc"
 	}
 }
