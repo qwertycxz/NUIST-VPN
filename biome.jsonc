@@ -78,7 +78,7 @@
 				"noUndeclaredClasses": "warn",
 				"noUnnecessaryTemplateExpression": "warn",
 				"noUnsafePlusOperands": "warn",
-				"noUnusedClasses": "warn",
+				// "noUnusedClasses": "warn", // 这个也有 Bug
 				"noUselessTypeConversion": "warn",
 				"useArraySome": "warn",
 				"useAwaitThenable": "warn",

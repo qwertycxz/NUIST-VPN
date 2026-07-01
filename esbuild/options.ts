@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/** biome-ignore-all lint/nursery/useUnicodeRegex: esbuild-plugin-replace 不支持 Unicode 正则 */
 import { exec } from 'child_process'
 import type { BuildOptions } from 'esbuild'
 import { replace } from 'esbuild-plugin-replace'
@@ -15,8 +16,8 @@ export default {
 	outdir: 'dist',
 	plugins: [
 		replace({
-			'0.0.0': (await promisify(exec)('git describe --abbrev=0 --match v* --tags')).stdout.match(/\d+\.\d+\.\d+/v)?.[0],
-			'include': /\.json$/v,
+			'0.0.0': (await promisify(exec)('git describe --abbrev=0 --match v* --tags')).stdout.match(/\d+\.\d+\.\d+/)?.[0],
+			'include': /\.json$/,
 		}),
 	],
 } satisfies BuildOptions
