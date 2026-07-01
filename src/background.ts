@@ -3,7 +3,7 @@ var browser: typeof chrome = globalThis.browser || globalThis.chrome
 
 browser.action.onClicked.addListener(async tab => {
 	if (!tab.url) throw new URIError('无法获取当前标签页的URL')
-	let { custom, vpn } = await browser.storage.sync.get<SyncStorage>(['custom', 'vpn'])
+	const { custom, vpn } = await browser.storage.sync.get<SyncStorage>(['custom', 'vpn'])
 	let key = ''
 	let origin = ''
 	switch (vpn) {
@@ -14,13 +14,14 @@ browser.action.onClicked.addListener(async tab => {
 		case 'builtin-njupt':
 			origin = 'https://vpn.njupt.edu.cn:8443'
 			break
-		default:
+		default: {
 			const server = custom?.[vpn.replace('custom-', '')]
 			if (!server) {
 				browser.runtime.openOptionsPage()
 				throw new TypeError('未找到自定义服务器配置')
 			}
 			;({ key, origin } = server)
+		}
 	}
 	if (!key) {
 		key = 'Q0FTQjIwMjFFbkxpbmshIQ=='

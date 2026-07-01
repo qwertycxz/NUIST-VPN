@@ -2,4 +2,4 @@
 import { build } from 'esbuild'
 import options from './options.ts'
 
-build(options)
+void build(options)

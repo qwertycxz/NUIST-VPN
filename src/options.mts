@@ -46,21 +46,21 @@ const list = getElement(HTMLElement, 'vpn-list')
 const nuist = getElement(HTMLInputElement, 'builtin-nuist')
 const template = getElement(HTMLTemplateElement, 'custom-template').content.firstElementChild
 function addCustom(vpns: {
-	[name: string]: {
+	[added: string]: {
 		origin: string
 	}
 }) {
 	list.append(
-		...Object.entries(vpns).map(([index, { origin }]) => {
+		...Object.entries(vpns).map(([index, { origin: added }]) => {
 			const clone = template?.cloneNode(true)
 			if (!(clone instanceof HTMLLabelElement && clone.firstElementChild instanceof HTMLInputElement)) throw new DOMException('clone类型错误')
 			clone.firstElementChild.value = `custom-${index}`
 			initialRadio(clone.firstElementChild)
 			const heading = clone.firstElementChild.nextElementSibling?.firstElementChild
 			if (!(heading instanceof HTMLHeadingElement)) throw new DOMException('heading类型错误')
-			heading.innerText = index
+			heading.textContent = index
 			if (!(heading.nextElementSibling instanceof HTMLDivElement)) throw new DOMException('div类型错误')
-			heading.nextElementSibling.innerText = origin
+			heading.nextElementSibling.textContent = added
 			clone.firstElementChild.nextElementSibling?.nextElementSibling?.addEventListener('click', () => {
 				if (!(custom && confirm(`确定要删除自定义服务器“${index}”吗？`))) return
 				clone.remove()

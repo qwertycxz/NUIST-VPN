@@ -15,8 +15,8 @@ export default {
 	outdir: 'dist',
 	plugins: [
 		replace({
-			'0.0.0': (await promisify(exec)('git describe --abbrev=0 --match v* --tags')).stdout.match(/\d+\.\d+\.\d+/)?.[0],
-			'include': /\.json$/,
+			'0.0.0': (await promisify(exec)('git describe --abbrev=0 --match v* --tags')).stdout.match(/\d+\.\d+\.\d+/v)?.[0],
+			'include': /\.json$/v,
 		}),
 	],
 } satisfies BuildOptions

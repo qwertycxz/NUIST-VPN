@@ -2,13 +2,14 @@
 	"$schema": "https://schemastore.org/package",
 	"bugs": "https://github.com/qwertycxz/NUIST-VPN/issues",
 	"dependencies": {
-		"esbuild": "^0.28.0",
+		"esbuild": "^0.28.1",
 		"esbuild-plugin-replace": "^1.4.0"
 	},
 	"devDependencies": {
-		"@types/chrome": "^0.1.43",
-		"@types/node": "^25.9.2",
-		"prettier": "^3.8.3",
+		"@biomejs/biome": "^2.5.1",
+		"@types/chrome": "^0.2.0",
+		"@types/node": "^26.0.1",
+		"prettier": "^3.9.4",
 		"typescript": "^6.0.3"
 	},
 	"funding": "https://ko-fi.com/qwertycxz",
@@ -28,8 +29,10 @@
 	"private": true,
 	"scripts": {
 		"build": "node esbuild/build.ts",
-		"check": "tsc",
 		"dev": "node esbuild/dev.ts",
-		"format": "prettier -w ."
+		"format": "prettier -w .",
+		"format:check": "prettier -c .",
+		"lint": "tsc && biome check",
+		"lint:fix": "biome check --fix --unsafe"
 	}
 }
