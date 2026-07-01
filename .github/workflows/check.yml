@@ -20,7 +20,7 @@ jobs:
 on:
   pull_request:
   push:
-    tags-ignore:
+    branches:
       - '*'
 permissions:
   contents: read
