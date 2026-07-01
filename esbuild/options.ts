@@ -7,10 +7,12 @@ import { promisify } from 'util'
 
 export default {
 	charset: 'utf8',
-	entryPoints: ['src/background.ts', 'src/manifest.json', 'src/options.html', 'src/options.mts'],
+	entryNames: '[name]',
+	entryPoints: ['icon.png', 'src/background.ts', 'src/manifest.json', 'src/options.css', 'src/options.html', 'src/options.mts'],
 	loader: {
 		'.html': 'copy',
 		'.json': 'copy',
+		'.png': 'copy',
 	},
 	minify: true,
 	outdir: 'dist',

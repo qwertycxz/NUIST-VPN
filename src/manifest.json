@@ -8,6 +8,11 @@
 		"scripts": ["background.js"],
 		"service_worker": "background.js"
 	},
+	"browser_specific_settings": {
+		"gecko": {
+			"id": "nuist-vpn@qwertycxz.top"
+		}
+	},
 	"description": "一键通过校园VPN访问网页，支持NUIST、NJUPT与其他所有使用江苏易安联网络技术有限公司校园VPN的高校。",
 	"homepage_url": "https://github.com/qwertycxz/NUIST-VPN",
 	"icons": {
