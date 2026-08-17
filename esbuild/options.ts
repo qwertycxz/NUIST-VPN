@@ -4,6 +4,7 @@ import { exec } from 'child_process'
 import type { BuildOptions } from 'esbuild'
 import { replace } from 'esbuild-plugin-replace'
 import { promisify } from 'util'
+import { out } from './constants.ts'
 
 export default {
 	charset: 'utf8',
@@ -15,7 +16,7 @@ export default {
 		'.png': 'copy',
 	},
 	minify: true,
-	outdir: 'dist',
+	outdir: out,
 	plugins: [
 		replace({
 			'0.0.0': (await promisify(exec)('git describe --abbrev=0 --match v* --tags')).stdout.match(/\d+\.\d+\.\d+/)?.[0],
