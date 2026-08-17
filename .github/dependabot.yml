@@ -1,0 +1,19 @@
+# yaml-language-server: $schema=https://schemastore.org/dependabot-2.0
+updates:
+  - assignees: [qwertycxz]
+    commit-message:
+      include: scope
+      prefix: npm
+    directory: /
+    package-ecosystem: npm
+    schedule:
+      interval: daily
+  - assignees: [qwertycxz]
+    commit-message:
+      include: scope
+      prefix: actions
+    directory: /
+    package-ecosystem: github-actions
+    schedule:
+      interval: daily
+version: 2
