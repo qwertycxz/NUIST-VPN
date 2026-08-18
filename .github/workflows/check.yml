@@ -7,7 +7,7 @@ jobs:
       - uses: actions/setup-node@main
         with:
           cache: npm
-      - run: npm i
+      - run: npm ci
       - run: npm run lint
       - run: npm run format
       - run: npm run type
