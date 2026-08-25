@@ -7,7 +7,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.8",
-		"@types/chrome": "^0.2.6",
+		"@types/chrome": "^0.2.7",
 		"@types/node": "^26.2.0",
 		"prettier": "^3.9.6",
 		"typescript": "^7.0.2"
