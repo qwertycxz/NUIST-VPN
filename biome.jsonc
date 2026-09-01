@@ -91,6 +91,7 @@
 				"useImportsFirst": "warn",
 				"useIncludes": "warn",
 				"useMathMinMax": "warn",
+				"useNamedLayer": "warn",
 				"useNullishCoalescing": "warn",
 				"useReduceTypeParameter": "warn",
 				"useRegexpExec": "warn",
