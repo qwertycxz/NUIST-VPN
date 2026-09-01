@@ -3,7 +3,7 @@
 	"bugs": "https://github.com/qwertycxz/NUIST-VPN/issues",
 	"dependencies": {
 		"esbuild": "^0.28.2",
-		"esbuild-plugin-replace": "^1.4.0"
+		"esbuild-plugin-replace": "^2.0.0"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^2.5.9",
