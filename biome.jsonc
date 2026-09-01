@@ -78,6 +78,7 @@
 				"noMisusedPromises": "warn",
 				"noRestrictedDependencies": "warn",
 				"noUndeclaredClasses": "warn",
+				"noUndeclaredCustomProperties": "warn",
 				"noUnnecessaryTemplateExpression": "warn",
 				"noUnsafePlusOperands": "warn",
 				"noUnusedClasses": "warn",
@@ -181,7 +182,7 @@
 				"noThenProperty": "off",
 				"noUnassignedVariables": "warn",
 				"noUndeclaredEnvVars": "off",
-				// "noUnnecessaryConditions": "warn", // Biome 这条规则有 Bug
+				"noUnnecessaryConditions": "warn",
 				"noUnusedExpressions": "warn",
 				"useAwait": "warn",
 				"useErrorMessage": "warn",
