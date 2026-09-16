@@ -6,7 +6,7 @@
 		"esbuild-plugin-replace": "^2.0.0"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "^2.5.12",
+		"@biomejs/biome": "^2.5.13",
 		"@types/chrome": "^0.2.9",
 		"@types/node": "^26.5.1",
 		"prettier": "^3.9.6",
