@@ -9,7 +9,7 @@
 		"@biomejs/biome": "^2.5.13",
 		"@types/chrome": "^0.3.0",
 		"@types/node": "^26.6.1",
-		"prettier": "^3.9.6",
+		"prettier": "^3.9.8",
 		"typescript": "^7.0.2"
 	},
 	"funding": "https://ko-fi.com/qwertycxz",
