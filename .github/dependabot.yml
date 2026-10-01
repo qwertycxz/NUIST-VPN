@@ -8,6 +8,7 @@ updates:
     package-ecosystem: npm
     schedule:
       interval: daily
+    versioning-strategy: increase
   - assignees: [qwertycxz]
     commit-message:
       include: scope
@@ -16,4 +17,5 @@ updates:
     package-ecosystem: github-actions
     schedule:
       interval: daily
+    versioning-strategy: increase
 version: 2
