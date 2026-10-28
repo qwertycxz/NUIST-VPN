@@ -1,4 +1,4 @@
-/** biome-ignore-all lint/nursery/useUnicodeRegex: esbuild-plugin-replace 不支持 Unicode 正则 */
+/** biome-ignore-all lint/style/useUnicodeRegex: esbuild-plugin-replace 不支持 Unicode 正则 */
 import { exec } from 'child_process'
 import type { BuildOptions } from 'esbuild'
 import { replace } from 'esbuild-plugin-replace'
