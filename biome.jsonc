@@ -99,6 +99,7 @@
 				"noUselessAssignment": "warn",
 				"noUselessCall": "warn",
 				"noUselessDateGetTime": "warn",
+				"noUselessRecursion": "warn",
 				"noUselessSplice": "warn",
 				"noUselessTypeConversion": "warn",
 				"noXorAsExponentiation": "warn",
@@ -136,6 +137,7 @@
 				"useTailwindSortedClasses": "warn",
 				"useUnaryMinus": "warn",
 				"useValidTestTitle": "warn",
+				"useWhileLoopCondition": "warn",
 			},
 			"performance": {
 				"noAwaitInLoops": "warn",
